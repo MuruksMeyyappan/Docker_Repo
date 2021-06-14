@@ -1,0 +1,11 @@
+sudo: require
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t muruks96/react-docker -f dockerFile.dev .
+
+script:
+  - docker run -e CI=true muruks96/react-docker npm run test
+
