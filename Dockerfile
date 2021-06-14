@@ -1,8 +1,13 @@
-# use existing docker image as base
-FROM alpine
+FROM node:alpine
 
-# Download and install dependency
-RUN apk add --update redis
+WORKDIR '/app'
 
-# tell the image what to do when it start
-CMD ["redis-server"]
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+RUN ["npm","run","build"]
+ 
+FROM nginx
+COPY --from=0 /app/build /usr/share/nginx/html
